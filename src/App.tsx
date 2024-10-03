@@ -41,7 +41,7 @@ function App() {
       </div>
       <div className="mt-16 flex justify-end">
         <button
-          className="bg-blue-500 text-white p-2 rounded-md mt-4"
+          className="bg-green-500 text-white p-2 rounded-md mt-4"
           onClick={() => setIsOpen(true)}
         >
           create new member

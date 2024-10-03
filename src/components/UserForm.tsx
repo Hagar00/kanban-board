@@ -26,114 +26,127 @@ const UserForm = () => {
   const getFormErrorMessage = (name: keyof UserFormData) => {
     const error = errors[name];
     return error ? (
-      <small className="text-red-500">{error.message}</small>
+      <small className="text-red-400 capitalize text-sm">{error.message}</small>
     ) : null;
   };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
-      <div>
+    <form onSubmit={onSubmit}>
+      <div className="mb-2 pt-5">
         <Controller
           name="title"
           rules={{
-            required: "Title is required",
+            required: "Please enter a title. This field cannot be empty.",
             minLength: {
               value: 3,
-              message: "title can not be less than 3 char",
+              message: "The title must be at least 3 characters long.",
             },
           }}
           control={control}
           render={({ field }) => (
-            <InputText label="Title" required {...field} />
+            <InputText label="Title" required {...field} placeholder="Title" />
           )}
         />
-
         {getFormErrorMessage("title")}
       </div>
 
-      <div>
+      <div className="mb-2">
         <Controller
           name="name"
           control={control}
           rules={{
-            required: "name is required",
+            required: "Please provide your name. It cannot be left blank.",
             minLength: {
               value: 3,
-              message: "name can not be less than 3 char",
+              message: "The name must be at least 3 characters long.",
+            },
+            pattern: {
+              value: /^[A-Za-z\s]+$/,
+              message: "Name can only contain letters and spaces.",
             },
           }}
-          render={({ field }) => <InputText label="Name" required {...field} />}
+          render={({ field }) => (
+            <InputText label="Name" required {...field} placeholder="Name" />
+          )}
         />
         {getFormErrorMessage("name")}
       </div>
 
-      <div>
+      <div className="mb-2">
         <Controller
           name="age"
           control={control}
           rules={{
-            required: "age is required",
-            min: { value: 1, message: "age must be greater than one year" },
-            max: { value: 100, message: "age must be smaller than 100 year" },
+            required: "Please enter your age. This field is mandatory.",
+            min: {
+              value: 1,
+              message: "Age must be greater than 1 year.",
+            },
+            max: {
+              value: 100,
+              message: "Age must be less than or equal to 100 years.",
+            },
             pattern: {
               value: /^(100|[1-9][0-9]?)$/,
-              message: "age must contain only numbers",
+              message: "Age must be a valid number between 1 and 100.",
             },
           }}
           render={({ field }) => (
-            <InputText
-              {...field}
-              label="Age"
-              placeholder="enter your age"
-              required
-            />
+            <InputText {...field} label="Age" placeholder="Age" required />
           )}
         />
         {getFormErrorMessage("age")}
       </div>
 
-      <div>
+      <div className="mb-2">
         <Controller
           name="email"
           control={control}
           rules={{
-            required: "email is required",
+            required: "Please enter your email address.",
             pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$/i,
-              message: "invalid email ",
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "Please enter a valid email address.",
             },
           }}
           render={({ field }) => (
-            <InputText label="Email" {...field} required />
+            <InputText label="Email" {...field} required placeholder="Email" />
           )}
         />
         {getFormErrorMessage("email")}
       </div>
 
-      <div>
+      <div className="mb-2">
         <Controller
           name="mobileNumber"
           control={control}
           rules={{
-            required: "phone is required",
+            required: "Please enter your mobile phone number.",
             pattern: {
               value: /^\d{11}$/,
-              message: "Phone number must contain exactly 11 digits",
+              message: "The phone number must contain exactly 11 digits.",
             },
           }}
           render={({ field }) => (
-            <InputText label="Phone" {...field} required />
+            <InputText
+              label="Phone"
+              {...field}
+              required
+              placeholder="Mobile Phone"
+            />
           )}
         />
         {getFormErrorMessage("mobileNumber")}
       </div>
 
-      <button
-        type="submit"
-        className="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50"
-      >
-        Submit
-      </button>
+      <div className="flex justify-end mt-4">
+        <button
+          type="submit"
+          className="p-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50"
+        >
+          Submit
+        </button>
+      </div>
     </form>
   );
 };
