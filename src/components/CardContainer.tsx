@@ -2,21 +2,33 @@ import { useState } from "react";
 import Card from "./Card";
 import Dialog from "./Dialog";
 import UserForm from "./UserForm";
-import { CardContainerProps } from "../types";
+import { CardContainerProps, CardData } from "../types";
 
 const CardContainer = ({
-  header,
   light,
+  header,
   addIcon,
   cardsData,
 }: CardContainerProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const onHide = () => setIsOpen(false);
+  const [selectedCard, setSelectedCard] = useState<
+    (CardData & { index: number }) | null
+  >(null);
+
+  const onHide = () => {
+    setIsOpen(false);
+    setSelectedCard(null);
+  };
+
+  const handleEdit = (data: CardData, index: number) => {
+    setSelectedCard({ ...data, index });
+    setIsOpen(true);
+  };
 
   return (
     <>
       <Dialog onHide={onHide} isOpen={isOpen}>
-        <UserForm onHide={onHide} />
+        <UserForm onHide={onHide} selectedCard={selectedCard} />
       </Dialog>
       <div className="flex w-full gap-4">
         <div
@@ -27,23 +39,30 @@ const CardContainer = ({
           <div className="flex items-center justify-between">
             <b>{header}</b>
             <div className="flex gap-2 items-center">
+              {addIcon && (
+                <span
+                  className="text-gray-500 rounded-md bg-green-300 flex items-center justify-center shadow-md cursor-pointer text-base py-2 px-3 hover:bg-green-400 hover:text-gray-700 hover:shadow-lg transition-all duration-200 ease-in-out"
+                  onClick={() => setIsOpen(true)}
+                >
+                  + Add New
+                </span>
+              )}
               <span className="h-10 w-10 rounded-full bg-white flex items-center justify-center shadow-md">
                 {cardsData.length}
               </span>
-              {addIcon && (
-                <span
-                  className="h-10 w-10 rounded-full bg-green-500 text-white flex items-center justify-center shadow-md cursor-pointer text-lg font-bold"
-                  onClick={() => setIsOpen(true)}
-                >
-                  +
-                </span>
-              )}
             </div>
           </div>
           {/* Cards */}
           <div className="space-y-2 mt-4 overflow-y-auto h-full p-1">
-            {cardsData.map((data, indx) => (
-              <Card {...data} key={indx} />
+            {cardsData.map((data, index) => (
+              <Card
+                {...data}
+                index={index}
+                key={index}
+                handleEdit={() => {
+                  handleEdit(data, index);
+                }}
+              />
             ))}
           </div>
         </div>

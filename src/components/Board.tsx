@@ -3,7 +3,7 @@ import CardContainer from "./CardContainer";
 import Divider from "./Divider";
 
 const Board = () => {
-    const { boardData, setBoardData } = useBoardDataStore();
+  const { boardData } = useBoardDataStore();
 
   return (
     <div className="overflow-x-auto w-full">
@@ -14,7 +14,6 @@ const Board = () => {
             light
             addIcon
             cardsData={boardData.unclaimed}
-   
           />
           <Divider />
         </div>
@@ -22,21 +21,18 @@ const Board = () => {
           <CardContainer
             header="First Contact"
             cardsData={boardData.firstContact}
-       
           />
         </div>
         <div className="flex w-full gap-4">
           <CardContainer
             header="Preparing Work Offer"
             cardsData={boardData.preparingWorkOffer}
-  
           />
         </div>
         <div className="flex w-full gap-4">
           <CardContainer
             header="Send to Therapists"
             cardsData={boardData.sendToTherapists}
-
           />
         </div>
       </div>

@@ -1,9 +1,11 @@
 import { Controller, useForm } from "react-hook-form";
+
+import { CardData, UserFormData } from "../types";
 import InputText from "./InputText";
-import { BoardData, UserFormData } from "../types";
-import { useBoardDataStore } from "../store/store";
+import { userService } from "../services/UserService";
 
 const defaultValues: UserFormData = {
+  colKey: "unclaimed",
   name: "",
   title: "",
   age: "",
@@ -11,25 +13,34 @@ const defaultValues: UserFormData = {
   mobileNumber: "",
 };
 
-const UserForm = ({ onHide }: { onHide: () => void }) => {
+const UserForm = ({
+  onHide,
+  selectedCard,
+}: {
+  onHide: () => void;
+  selectedCard: (CardData & { index: number }) | null;
+}) => {
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<UserFormData>({ defaultValues });
-
-  const { boardData, setBoardData } = useBoardDataStore();
+  } = useForm<UserFormData>({
+    mode: "onChange",
+    defaultValues: selectedCard ? selectedCard : defaultValues,
+  });
 
   const onSubmit = handleSubmit((data) => {
-    const updatedBoardData: BoardData = {
-      ...boardData,
-      unclaimed: [...(boardData.unclaimed || []), data],
-    };
-    setBoardData(updatedBoardData);
+    if (selectedCard) {
+      userService.editUser(selectedCard.index, data);
+    } else {
+      userService.addUser(data);
+    }
+
     reset();
     onHide();
   });
+
   const getFormErrorMessage = (name: keyof UserFormData) => {
     const error = errors[name];
     return error ? (
@@ -151,7 +162,7 @@ const UserForm = ({ onHide }: { onHide: () => void }) => {
           type="submit"
           className="p-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700"
         >
-          Add Member
+          {selectedCard ? "Update Member" : "Add Member"}
         </button>
       </div>
     </form>
