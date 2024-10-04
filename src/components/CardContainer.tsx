@@ -2,32 +2,26 @@ import { useState } from "react";
 import Card from "./Card";
 import Dialog from "./Dialog";
 import UserForm from "./UserForm";
-import { CardData } from "../types";
-interface CardContainerProps {
-  header: string;
-  light?: boolean;
-  addIcon?: boolean;
-  cardsData: CardData[];
-}
+import { CardContainerProps } from "../types";
 
 const CardContainer = ({
   header,
   light,
   addIcon,
   cardsData,
+  refreshBoard,
 }: CardContainerProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const onHide = () => {
-    setIsOpen(false);
-  };
+  const onHide = () => setIsOpen(false);
+
   return (
     <>
       <Dialog onHide={onHide} isOpen={isOpen}>
-        <UserForm />
+        <UserForm refreshBoard={refreshBoard} onHide={onHide} />
       </Dialog>
       <div className="flex w-full gap-4">
         <div
-          className={`px-2 py-4 border-2  rounded-md w-full h-[calc(100vh-5.5rem)] flex flex-col ${
+          className={`px-2 py-4 border-2 rounded-md w-full h-[calc(100vh-5.5rem)] flex flex-col ${
             light ? "border-slate-300" : "bg-slate-300"
           }`}
         >

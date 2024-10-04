@@ -1,13 +1,8 @@
 import { Controller, useForm } from "react-hook-form";
 import InputText from "./InputText";
+import { UserFormData } from "../types";
 
-type UserFormData = {
-  name: string;
-  title: string;
-  age: string;
-  email: string;
-  mobileNumber: string;
-};
+
 const defaultValues: UserFormData = {
   name: "",
   title: "",
@@ -15,13 +10,33 @@ const defaultValues: UserFormData = {
   email: "",
   mobileNumber: "",
 };
-const UserForm = () => {
+
+const UserForm = ({
+  refreshBoard,
+  onHide,
+}: {
+  refreshBoard: () => void;
+  onHide: () => void;
+}) => {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<UserFormData>({ defaultValues });
-  const onSubmit = handleSubmit((data) => console.log(data));
+
+  const onSubmit = handleSubmit((data) => {
+    const storedData = JSON.parse(localStorage.getItem("boardData") || "{}");
+    const updatedBoardData = {
+      ...storedData,
+      unclaimed: [...(storedData.unclaimed || []), data],
+    };
+    localStorage.setItem("boardData", JSON.stringify(updatedBoardData));
+
+    refreshBoard();
+    reset();
+    onHide();
+  });
 
   const getFormErrorMessage = (name: keyof UserFormData) => {
     const error = errors[name];
@@ -142,9 +157,9 @@ const UserForm = () => {
       <div className="flex justify-end mt-4">
         <button
           type="submit"
-          className="p-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50"
+          className="p-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700"
         >
-          Submit
+          Add Member
         </button>
       </div>
     </form>

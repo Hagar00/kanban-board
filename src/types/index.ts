@@ -5,3 +5,19 @@ export type CardData = {
   mobileNumber: string;
   age: string;
 };
+
+export type UserFormData = {
+  name: string;
+  title: string;
+  age: string;
+  email: string;
+  mobileNumber: string;
+};
+
+export interface CardContainerProps {
+  header: string;
+  light?: boolean;
+  addIcon?: boolean;
+  cardsData: CardData[];
+  refreshBoard: () => void;
+}
