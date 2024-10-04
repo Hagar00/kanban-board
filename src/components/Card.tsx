@@ -3,7 +3,7 @@ import Dropdown from "./Dropdown";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { userService } from "../services/UserService";
+import { userService } from "../services/userService";
 
 const options: Option[] = [
   { value: "unclaimed", label: "Unclaimed" },

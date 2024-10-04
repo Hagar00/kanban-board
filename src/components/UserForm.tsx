@@ -2,7 +2,7 @@ import { Controller, useForm } from "react-hook-form";
 
 import { CardData, UserFormData } from "../types";
 import InputText from "./InputText";
-import { userService } from "../services/UserService";
+import { userService } from "../services/userService";
 
 const defaultValues: UserFormData = {
   colKey: "unclaimed",
