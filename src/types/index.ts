@@ -19,5 +19,11 @@ export interface CardContainerProps {
   light?: boolean;
   addIcon?: boolean;
   cardsData: CardData[];
-  refreshBoard: () => void;
 }
+
+export type BoardData = {
+  unclaimed: UserFormData[];
+  firstContact: UserFormData[];
+  preparingWorkOffer: UserFormData[];
+  sendToTherapists: UserFormData[];
+};

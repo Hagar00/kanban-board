@@ -1,7 +1,7 @@
 import { Controller, useForm } from "react-hook-form";
 import InputText from "./InputText";
-import { UserFormData } from "../types";
-
+import { BoardData, UserFormData } from "../types";
+import { useBoardDataStore } from "../store/store";
 
 const defaultValues: UserFormData = {
   name: "",
@@ -11,13 +11,7 @@ const defaultValues: UserFormData = {
   mobileNumber: "",
 };
 
-const UserForm = ({
-  refreshBoard,
-  onHide,
-}: {
-  refreshBoard: () => void;
-  onHide: () => void;
-}) => {
+const UserForm = ({ onHide }: { onHide: () => void }) => {
   const {
     control,
     handleSubmit,
@@ -25,19 +19,17 @@ const UserForm = ({
     formState: { errors },
   } = useForm<UserFormData>({ defaultValues });
 
-  const onSubmit = handleSubmit((data) => {
-    const storedData = JSON.parse(localStorage.getItem("boardData") || "{}");
-    const updatedBoardData = {
-      ...storedData,
-      unclaimed: [...(storedData.unclaimed || []), data],
-    };
-    localStorage.setItem("boardData", JSON.stringify(updatedBoardData));
+  const { boardData, setBoardData } = useBoardDataStore();
 
-    refreshBoard();
+  const onSubmit = handleSubmit((data) => {
+    const updatedBoardData: BoardData = {
+      ...boardData,
+      unclaimed: [...(boardData.unclaimed || []), data],
+    };
+    setBoardData(updatedBoardData);
     reset();
     onHide();
   });
-
   const getFormErrorMessage = (name: keyof UserFormData) => {
     const error = errors[name];
     return error ? (

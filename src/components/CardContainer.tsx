@@ -9,7 +9,6 @@ const CardContainer = ({
   light,
   addIcon,
   cardsData,
-  refreshBoard,
 }: CardContainerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const onHide = () => setIsOpen(false);
@@ -17,7 +16,7 @@ const CardContainer = ({
   return (
     <>
       <Dialog onHide={onHide} isOpen={isOpen}>
-        <UserForm refreshBoard={refreshBoard} onHide={onHide} />
+        <UserForm onHide={onHide} />
       </Dialog>
       <div className="flex w-full gap-4">
         <div
@@ -42,7 +41,7 @@ const CardContainer = ({
             </div>
           </div>
           {/* Cards */}
-          <div className="space-y-2 mt-4 overflow-y-auto max-h-full p-1">
+          <div className="space-y-2 mt-4 overflow-y-auto h-full p-1">
             {cardsData.map((data, indx) => (
               <Card {...data} key={indx} />
             ))}
